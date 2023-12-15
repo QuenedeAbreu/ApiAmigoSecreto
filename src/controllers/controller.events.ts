@@ -37,3 +37,37 @@ export const eventsAddEvent:RequestHandler = async (req,res) =>{
 
   res.status(500).json({error:'Internal Server Error'})
 }
+
+export const eventsUpdateEvent:RequestHandler = async (req,res) =>{
+  const id = req.params.id;
+  const updateEventSchema = z.object({
+    status: z.boolean().optional(),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    grouped: z.boolean().optional()
+  })
+  
+  const body = updateEventSchema.safeParse(req.body);
+  if(!body.success) return res.status(400).json({error: 'Data Invalid!'});
+  
+  const updateEvent = await serviceEvents.eventUpdate(parseInt(id),body.data);
+  if(updateEvent){
+    if(updateEvent.status){
+      // Fazer o sorteio
+    }else{
+
+      //Limpar o sorteio
+    }
+    return res.status(200).json({event:updateEvent});
+  } 
+
+  res.status(500).json({error:'Internal Server Error'})
+}
+
+export const eventsDeleteEvent:RequestHandler = async (req,res) =>{
+  const id = req.params.id;
+  const deleteEvent = await serviceEvents.eventDelete(parseInt(id));
+  if(deleteEvent) return res.status(200).json({event:deleteEvent});
+
+  res.status(500).json({error:'Internal Server Error'})
+}
