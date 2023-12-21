@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import * as peopleService from "../services/service.people";
+import * as utils from "../utils/match";
 import { z } from "zod";
 
 export const peopleGetAll: RequestHandler  = async (req,res) =>{
@@ -88,5 +89,43 @@ export const peopleDelete: RequestHandler  = async (req,res) =>{
     id_group:parseInt(id_group)
   })
   if(people){return res.status(200).json({people});}
+  return res.status(404).json({message:"Not found"})
+}
+export const peopleSearch: RequestHandler  = async (req,res) =>{
+
+  const id_event =  req.params.id_event;
+  const searchPeopleSchema = z.object({
+    cpf:z.string().transform(val=>val.replace(/\.|-/gm,''))
+  })
+  const query = searchPeopleSchema.safeParse(req.query);
+  if(!query.success){
+    return res.status(400).json({message:"Invalid data"})
+  }
+  const peopleItem = await peopleService.peopleGetById({
+    id_event:parseInt(id_event),
+    cpf:query.data.cpf
+  })
+  if(peopleItem && peopleItem.matched){
+    const matchId = utils.decryptMatch(peopleItem.matched);
+    
+    const peopleMatch = await peopleService.peopleGetById({
+      id_event:parseInt(id_event),
+      id:matchId
+    })
+    if(peopleMatch){
+
+      return res.status(200).json({
+        people:{
+          id:peopleItem.id,
+          name:peopleItem.name
+        },
+        peopleMatch:{
+          id:peopleMatch.id,
+          name:peopleMatch.name
+        }
+      });
+    }
+  }
+  
   return res.status(404).json({message:"Not found"})
 }
