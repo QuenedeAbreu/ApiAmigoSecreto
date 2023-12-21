@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import * as serviceEvents from '../services/service.events';
+import * as servicePeople from '../services/service.people'
 import { z } from "zod";
 
 export const eventsGetAll:RequestHandler = async (req,res) =>{
@@ -54,9 +55,17 @@ export const eventsUpdateEvent:RequestHandler = async (req,res) =>{
   if(updateEvent){
     if(updateEvent.status){
       // Fazer o sorteio
+      const DrawResult = await serviceEvents.doMatch(parseInt(id));
+      if(!DrawResult){
+        return res.status(500).json({error:'Groups impossible to draw!'})
+      }
+      
     }else{
-
       //Limpar o sorteio
+      await servicePeople.peopleUpdate({
+        matched:'',
+        id_event: parseInt(id)
+      })
     }
     return res.status(200).json({event:updateEvent});
   } 

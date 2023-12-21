@@ -4,6 +4,9 @@ import {validadeLogin} from '../utils/middleware/validadeLoginMiddleware'
 
 import * as controllerEvent from '../controllers/controller.events';
 import * as controllerGroup from '../controllers/controller.groups';
+import * as controllerPeople from '../controllers/controller.people';
+
+
 
 
 const router = Router();
@@ -18,6 +21,18 @@ router.delete('/events/:id',validadeLogin,controllerEvent.eventsDeleteEvent);
 
 // Rotas de Grupos
 router.get('/events/:id_event/groups',validadeLogin,controllerGroup.groupsGetAll);
+router.get('/events/:id_event/groups/:id',validadeLogin,controllerGroup.groupsGetById);
+router.post('/events/:id_event/groups',validadeLogin,controllerGroup.groupsAdd);
+router.put('/events/:id_event/groups/:id',validadeLogin,controllerGroup.groupsUpdate);
+router.delete('/events/:id_event/groups/:id',validadeLogin,controllerGroup.groupsDelete);
+
+// Rotas de pessoas
+router.get('/events/:id_event/groups/:id_group/people',validadeLogin,controllerPeople.peopleGetAll);
+router.get('/events/:id_event/groups/:id_group/people/:id',validadeLogin,controllerPeople.peopleGetById);
+router.post('/events/:id_event/groups/:id_group/people',validadeLogin,controllerPeople.peopleAdd);
+router.put('/events/:id_event/groups/:id_group/people/:id',validadeLogin,controllerPeople.peopleUpdate);
+router.delete('/events/:id_event/groups/:id_group/people/:id',validadeLogin,controllerPeople.peopleDelete);
+
 
 
 
