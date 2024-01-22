@@ -1,8 +1,27 @@
-import app from './app';
+// import app from './app';
 import 'dotenv/config';
 import https from 'https';
 import http from 'http';
 
+import express from 'express';
+import cors from 'cors';
+import siteRouters from './routers/site.routers';
+import adminRouters from './routers/admin.routers';
+import {requestIntercepter} from './utils/middleware/requestIntercepter';
+
+
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'))
+//middleware
+app.all('*',requestIntercepter)
+
+app.use('/api',siteRouters)
+app.use('/api/admin',adminRouters)
 
 
 const runServer = (port:number, server: http.Server) =>{
