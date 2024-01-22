@@ -22,6 +22,7 @@ const regularServer = http.createServer(app);
 if(process.env.NODE_ENV === 'production'){
     //Configurar SSL
     //Rodar server na 80 e na 443
+    runServer(80, regularServer);
 }else{
   const serverPort:number = process.env.PORT ? parseInt(process.env.PORT):9000;
   runServer(serverPort, regularServer);
