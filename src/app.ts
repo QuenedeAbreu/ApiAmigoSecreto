@@ -15,7 +15,7 @@ app.use(express.static('public'))
 //middleware
 app.all('*',requestIntercepter)
 
-app.use('/',siteRouters)
-app.use('/admin',adminRouters)
+app.use('/api',siteRouters)
+app.use('/api/admin',adminRouters)
 
 export default app;
