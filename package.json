@@ -5,6 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
+    "postinstall": "prisma generate",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "migrate:deploy": "prisma migrate deploy",
+    "migrate:dev": "prisma migrate dev",
     "vercel-build": "npx prisma migrate deploy"
   },
   "author": "",
