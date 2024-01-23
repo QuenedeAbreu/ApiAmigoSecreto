@@ -9,7 +9,7 @@
     "start": "node dist/index.js",
     "migrate:deploy": "prisma migrate deploy",
     "migrate:dev": "prisma migrate dev",
-    "vercel-build": "npm run build && npm run migrate:deploy"
+    "vercel-build": "npm run migrate:deploy"
   },
   "author": "",
   "license": "ISC",
