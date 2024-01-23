@@ -8,7 +8,7 @@ import {requestIntercepter} from './utils/middleware/requestIntercepter';
 
 const app = express();
 // View engine setup
-app.set('view engine', 'ejs');
+//app.set('view engine', 'ejs');
 
 app.use(cors());
 app.use(express.json());
