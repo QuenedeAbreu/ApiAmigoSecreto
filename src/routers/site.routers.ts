@@ -7,7 +7,7 @@ const router = Router();
 
 router.get('/', (req, res) => {
     
-    res.sendFile(path.join(__dirname, '../views/home.html'));
+    res.sendFile(path.join(__dirname, '../../views/home.html'));
 
 })
 router.get('/events/:id',eventController.eventsGetById);
