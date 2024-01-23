@@ -5,8 +5,8 @@ const router = Router();
 
 
 router.get('/', (req, res) => {
-    res.json('Teste');
-
+    res.render('home');
+    
 })
 router.get('/events/:id',eventController.eventsGetById);
 router.get('/events/:id_event/search',peopleController.peopleSearch);
