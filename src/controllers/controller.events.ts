@@ -28,9 +28,9 @@ export const eventsAddEvent:RequestHandler = async (req,res) =>{
     grouped: z.boolean()
   })
   
-  console.log(req.body);
+  // console.log(req.body);
   const data = addEventSchema.safeParse(req.body);
-  console.log(data);
+  // console.log(data);
   if(!data.success) return res.status(400).json({error: 'Data Invalid!'});
   
   const newEvent  = await serviceEvents.eventAdd(data.data);

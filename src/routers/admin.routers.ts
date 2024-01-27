@@ -11,6 +11,13 @@ import * as controllerPeople from '../controllers/controller.people';
 
 const router = Router();
 
+//Rotas usuario
+router.post('/register',validadeLogin,controllerAuth.UserAdd);
+router.get('/user',validadeLogin,controllerAuth.UserGetAll);
+router.get('/user/:id',validadeLogin,controllerAuth.UserGetById);
+router.put('/user/:id',validadeLogin,controllerAuth.UserUpdate);
+router.put('/user/:id/status',validadeLogin,controllerAuth.UserUpdateStatus);
+
 router.post('/login',controllerAuth.login);
 // Rotas de eventos
 router.get('/events',validadeLogin,controllerEvent.eventsGetAll);
