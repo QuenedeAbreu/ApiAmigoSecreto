@@ -1,22 +1,47 @@
 import { getToday } from "../utils/getToday"
 import { PrismaClient,Prisma} from "@prisma/client"
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import fs from 'fs'
 
 const prisma = new PrismaClient()
 
-export const validadePassword = (password:string ):boolean =>{
-  const currentPassword = getToday().split('/').join('')
-  return password === currentPassword
+type LoginUser = {email:string,password:string}
+type returnValidadeLogin = {
+  is_login:boolean,
+  id?:number,
+  message?:string
+}
+export const validadeLogin = async (data:LoginUser ):Promise<returnValidadeLogin> =>{
+    const {email,password} = data
+    const user = await userGetByEmail(email)
+    if(!user) return {
+        is_login:false,
+        message:"Usuário não existe!"
+      }
+    const resultPassword = await bcrypt.compare(password,user.password)
+      if(resultPassword && !user.is_active) return {
+        is_login:false,
+        message:"Usuario não está ativo!"
+      }
+      if(resultPassword) return {
+        is_login:true,
+        id:user.id
+      }
+
+  return {is_login:false,message:"Email ou senha incorreto!"}
 }
 
-export const createToken = () =>{
-  const currentPassword = getToday().split('/').join('')
-  return `${process.env.DEFAULT_TOKEN}${currentPassword}`
+export const createToken = (id: number) =>{
+  const privateKey = fs.readFileSync('./private.key')
+  const jwtToken = jwt.sign({id},privateKey,{algorithm:'RS256'})
+  return jwtToken
 }
 
 export const validadeToken = (token: string) =>{
-  const currentToken = createToken()
-  // console.log(token);
-  return token === `${currentToken}`
+  const validToken = jwt.verify(token, fs.readFileSync('./private.key'))
+  // console.log(validToken);
+  return true
 }
 
 //Busacar todos os usuairos
