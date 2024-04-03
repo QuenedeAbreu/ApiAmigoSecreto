@@ -4,7 +4,7 @@ import * as servicesAuth from "../services/service.auth";
 import bcrypt from "bcrypt";
 
 
-
+//Pegar todos os usuarios
 export const UserGetAll:RequestHandler = async (req,res) =>{
   const users = await servicesAuth.userGetAll();
   if(users) return res.status(200).json({users:users});
@@ -19,6 +19,31 @@ export const UserGetById:RequestHandler = async (req,res) =>{
   res.status(500).json({error:"Internal Server Error"})
 }
 
+//Adcionar o primeior Usuario
+export const UserAddFirst:RequestHandler = async (req, res) =>{
+    const userSchema = z.object({
+      name: z.string(),
+      email: z.string().email(),
+      password: z.string()
+    })
+   
+    const body = userSchema.safeParse(req.body)
+    if(!body.success) return res.status(400).json({error: "Dados Invalidos!"});
+
+    //Validar se ja existe usuario
+    const existUser = await servicesAuth.userGetAll();
+    if(existUser != false || existUser == null) return res.status(308).json({error: "Já existe usuáriario cadastrado. Use a rota Principal!"})
+    
+    const salt = bcrypt.genSaltSync(parseInt(process.env.SALT_BCRYPT as string));
+    const hash = bcrypt.hashSync(body.data.password, salt);
+    body.data.password = hash;
+    //Adicionar um novo usuario
+    const newUser = await servicesAuth.userAdd(body.data);
+    if(newUser) return res.status(201).json({user:newUser});  
+    res.status(500).json({error:"Internal Server Error"})
+  }
+
+// Adicionar usuario
 export const UserAdd:RequestHandler = async (req,res) =>{
   const userSchema = z.object({
     name: z.string(),
@@ -51,7 +76,6 @@ export const UserUpdate:RequestHandler = async (req,res) =>{
     password: z.string().optional()
   })
   const body = updateUserSchema.safeParse(req.body)
-  //console.log(body);
   if(!body.success) return res.status(400).json({error: "Dados Invalidos!"});
 
   //Validar se o usuario existe

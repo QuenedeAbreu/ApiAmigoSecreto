@@ -40,7 +40,6 @@ export const createToken = (id: number) =>{
 
 export const validadeToken = (token: string) =>{
   const validToken = jwt.verify(token, fs.readFileSync('./private.key'))
-  // console.log(validToken);
   return true
 }
 
