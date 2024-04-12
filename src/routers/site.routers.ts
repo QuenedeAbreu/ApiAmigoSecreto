@@ -11,9 +11,6 @@ router.get('/', (req, res) => {
 router.get('/events/:id',eventController.eventsGetById);
 router.get('/events/:id_event/search',peopleController.peopleSearch);
 
-
-
-
 router.get('/ping', (req, res) => {
     res.json('pong');
 

@@ -17,7 +17,7 @@ export const validadeLogin = async (data:LoginUser ):Promise<returnValidadeLogin
     const user = await userGetByEmail(email)
     if(!user) return {
         is_login:false,
-        message:"Usuário não existe!"
+        message:"Email ou senha incorreto!"
       }
     const resultPassword = await bcrypt.compare(password,user.password)
       if(resultPassword && !user.is_active) return {
