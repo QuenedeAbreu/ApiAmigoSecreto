@@ -52,12 +52,15 @@ export const eventsUpdateEvent:RequestHandler = async (req,res) =>{
   if(!body.success) return res.status(400).json({error: 'Data Invalid!'});
   
   const updateEvent = await serviceEvents.eventUpdate(parseInt(id),body.data);
+
   if(updateEvent){
     if(updateEvent.status){
       // Fazer o sorteio
       const DrawResult = await serviceEvents.doMatch(parseInt(id));
+      //console.log(DrawResult);
       if(!DrawResult){
-        return res.status(500).json({error:'Groups impossible to draw!'})
+        await serviceEvents.eventUpdate(parseInt(id), {status:false})
+        return res.status(500).json({error:'Sorteio não realizado!'})
       }
       
     }else{

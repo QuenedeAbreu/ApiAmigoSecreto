@@ -57,6 +57,7 @@ export const doMatch = async (id: number): Promise<boolean> => {
   const eventItem = await prisma.event.findFirst({ where: { id }, select: { grouped: true } });
   if (eventItem) {
     const peopleList = await servicePeople.peopleGetAll({ id_event: id });
+    
     if (peopleList) {
       let sortedList: { id: number, matech: number }[] = []
       let sortable: number[] = []
@@ -71,20 +72,25 @@ export const doMatch = async (id: number): Promise<boolean> => {
 
         for(let i in peopleList){
           let sortableFiltered: number[] = sortable;
-          if(eventItem.grouped = true){
+          
+          if(eventItem.grouped === true){
+
             sortableFiltered = sortable.filter(sortableItem=>{
-              let sortablePerson = peopleList.find(item => item.id == sortableItem);
-              return peopleList[i].id_group != sortablePerson?.id_group;
+              let sortablePerson = peopleList.find(item => item.id === sortableItem);
+              return peopleList[i].id_group !== sortablePerson?.id_group;
 
             })
           }
-          if(sortableFiltered.length === 0 || (sortableFiltered.length ===1 && peopleList[i].id === sortableFiltered[0])){
+          
+          if(sortableFiltered.length === 0 || (sortableFiltered.length === 1 && peopleList[i].id === sortableFiltered[0])){
            keepTrying = true;
+           
           }else{
             let sortedIndex = Math.floor(Math.random() * sortableFiltered.length);
             while(sortableFiltered[sortedIndex] === peopleList[i].id){
               sortedIndex = Math.floor(Math.random() * sortableFiltered.length);
             }
+           
             sortedList.push({
               id:peopleList[i].id,
               matech:sortableFiltered[sortedIndex]
@@ -94,7 +100,6 @@ export const doMatch = async (id: number): Promise<boolean> => {
           }
         }
       }
-
       if (attempts < maxAttempts) {
         for (let i in sortedList) {
           await servicePeople.peopleUpdate({
