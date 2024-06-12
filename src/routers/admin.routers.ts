@@ -8,11 +8,10 @@ import * as controllerPeople from '../controllers/controller.people';
 
 
 
-
 const router = Router();
 
 //Rotas usuario
-router.post('/verifyexistsuser',controllerAuth.verifyExistsUser)
+router.get('/verifyexistsuser',controllerAuth.verifyExistsUser)
 router.post('/firstregister',controllerAuth.UserAddFirst)
 
 router.post('/register',validadeLogin,controllerAuth.UserAdd);
