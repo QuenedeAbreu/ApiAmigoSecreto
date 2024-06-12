@@ -44,12 +44,12 @@ export const UserAddFirst:RequestHandler = async (req, res) =>{
   }
 
 export const verifyExistsUser:RequestHandler = async (req, res) =>{
-  const user = await servicesAuth.userGetAll();
-  if(user) return res.status(200).json({exists:true});
+  const existUser = await servicesAuth.userGetAll();
+  //Validar se ja existe usuario;
+  if(existUser != false || existUser == null) return res.status(200).json({exists:true});
   res.status(200).json({exists:false});
 }
 
-  
 // Adicionar usuario
 export const UserAdd:RequestHandler = async (req,res) =>{
   const userSchema = z.object({
