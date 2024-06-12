@@ -43,6 +43,13 @@ export const UserAddFirst:RequestHandler = async (req, res) =>{
     res.status(500).json({message:"Internal Server Error"})
   }
 
+export const verifyExistsUser:RequestHandler = async (req, res) =>{
+  const user = await servicesAuth.userGetAll();
+  if(user) return res.status(200).json({exists:true});
+  res.status(200).json({exists:false});
+}
+
+  
 // Adicionar usuario
 export const UserAdd:RequestHandler = async (req,res) =>{
   const userSchema = z.object({

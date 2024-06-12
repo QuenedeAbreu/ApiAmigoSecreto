@@ -27,7 +27,7 @@ model Event {
   description String
   grouped     Boolean       @default(false)
   id_user     Int
-  User        User          @relation(fields: [id_user], references: [id])
+  User        User?         @relation(fields: [id_user], references: [id])
   EventGroup  EventGroup[]
   EventPeople EventPeople[]
 }
