@@ -11,12 +11,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        Int     @id @default(autoincrement())
+  name      String
+  email     String  @unique
+  password  String
+  is_active Boolean @default(true)
+  Event     Event[]
+}
+
 model Event {
   id          Int           @id @default(autoincrement())
   status      Boolean       @default(false)
   title       String
   description String
   grouped     Boolean       @default(false)
+  id_user     Int
+  User        User          @relation(fields: [id_user], references: [id])
   EventGroup  EventGroup[]
   EventPeople EventPeople[]
 }
@@ -42,12 +53,4 @@ model EventPeople {
 
   //Relação com Grupo
   group EventGroup? @relation(fields: [id_group], references: [id])
-}
-
-model User {
-  id        Int     @id @default(autoincrement())
-  name      String
-  email     String  @unique
-  password  String
-  is_active Boolean @default(true)
 }
