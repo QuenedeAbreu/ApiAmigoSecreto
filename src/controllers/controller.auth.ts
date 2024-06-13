@@ -46,8 +46,8 @@ export const UserAddFirst:RequestHandler = async (req, res) =>{
 export const verifyExistsUser:RequestHandler = async (req, res) =>{
   const existUser = await servicesAuth.userGetAll();
   //Validar se ja existe usuario;
-  if(existUser != false || existUser == null) return res.status(200).json({exists:true});
-  res.status(200).json({exists:false});
+  if(existUser != false || existUser == null) return res.status(200).json({exists:false});
+  res.status(200).json({exists:true});
 }
 
 // Adicionar usuario
@@ -133,7 +133,7 @@ export const login:RequestHandler = async (req,res) =>{
   const userLogin = await servicesAuth.validadeLogin(body.data)
   if(userLogin.is_login){
     if(userLogin.id){
-    return res.status(200).json({token: servicesAuth.createToken(userLogin.id)})
+    return res.status(200).json({token: servicesAuth.createToken(userLogin.id),user:userLogin.user})
     }
   }
   return res.status(403).json(userLogin)

@@ -10,7 +10,8 @@ type LoginUser = {email:string,password:string}
 type returnValidadeLogin = {
   is_login:boolean,
   id?:number,
-  message?:string
+  message?:string,
+  user?:{name:string,email:string}
 }
 export const validadeLogin = async (data:LoginUser ):Promise<returnValidadeLogin> =>{
     const {email,password} = data
@@ -26,7 +27,11 @@ export const validadeLogin = async (data:LoginUser ):Promise<returnValidadeLogin
       }
       if(resultPassword) return {
         is_login:true,
-        id:user.id
+        id:user.id,
+        user:{
+          name:user.name,
+          email:user.email
+        }
       }
 
   return {is_login:false,message:"Email ou senha incorreto!"}
