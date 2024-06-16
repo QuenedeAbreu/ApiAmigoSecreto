@@ -38,7 +38,6 @@ export const peopleAdd: RequestHandler  = async (req,res) =>{
   if(!body.success){
     return res.status(400).json({message:"Invalid data"})
   }
-
   const people = await peopleService.peopleAdd({
     id_event:parseInt(id_event),
     id_group:parseInt(id_group),
@@ -47,6 +46,7 @@ export const peopleAdd: RequestHandler  = async (req,res) =>{
   if(people){return res.status(201).json({people});}
   return res.status(404).json({message:"Not found"})
 }
+
 export const peopleUpdate: RequestHandler  = async (req,res) =>{
   const id =  req.params.id;
   const id_group =  req.params.id_group;

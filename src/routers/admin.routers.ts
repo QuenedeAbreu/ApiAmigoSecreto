@@ -22,7 +22,7 @@ router.put('/user/:id/status',validadeLogin,controllerAuth.UserUpdateStatus);
 
 router.post('/login',controllerAuth.login);
 // Rotas de eventos
-router.get('/events',validadeLogin,controllerEvent.eventsGetAll);
+router.get('/events/:id_user',validadeLogin,controllerEvent.eventsGetAll);
 router.get('/events/:id',validadeLogin,controllerEvent.eventsGetById);
 router.post('/events',validadeLogin,controllerEvent.eventsAddEvent);
 router.put('/events/:id',validadeLogin,controllerEvent.eventsUpdateEvent);

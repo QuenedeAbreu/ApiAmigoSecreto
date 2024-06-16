@@ -4,7 +4,8 @@ import * as servicePeople from '../services/service.people'
 import { z } from "zod";
 
 export const eventsGetAll:RequestHandler = async (req,res) =>{
-  const items = await serviceEvents.eventsGetAll();
+  const id_user = req.params.id_user;
+  const items = await serviceEvents.eventsGetAll(parseInt(id_user));
   
   if(items) return res.status(200).json({events:items});
   
