@@ -5,7 +5,10 @@ import { z } from "zod";
 
 export const eventsGetAll:RequestHandler = async (req,res) =>{
   const id_user = req.params.id_user;
-  const items = await serviceEvents.eventsGetAll(parseInt(id_user));
+  const {search,
+          take,
+          skip} = req.query
+  const items = await serviceEvents.eventsGetAll(parseInt(id_user),search as string | undefined,take? parseInt(take as string): undefined,skip? parseInt(skip as string): undefined );
   
   if(items) return res.status(200).json({events:items});
   

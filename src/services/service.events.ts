@@ -5,10 +5,16 @@ import * as utils from '../utils/match'
 
 const prisma = new PrismaClient()
 
-export const eventsGetAll = async (id_user: number) => {
+export const eventsGetAll = async (id_user: number,contains?:string,take?:number,skip?:number) => {
   try {
     return await prisma.event.findMany({
-      where: { id_user: id_user }
+      where: { 
+        id_user: id_user,
+        title:{
+          contains
+        }},
+        take,
+        skip
     });
   } catch (error) {
     return false;
