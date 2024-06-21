@@ -26,6 +26,7 @@ export const eventsGetById:RequestHandler = async (req,res) =>{
 }
 
 export const eventsAddEvent:RequestHandler = async (req,res) =>{
+  const id_user = req.params.id_user;
   const addEventSchema = z.object({
     title: z.string(),
     description: z.string(),
@@ -38,7 +39,7 @@ export const eventsAddEvent:RequestHandler = async (req,res) =>{
   // console.log(data);
   if(!data.success) return res.status(400).json({error: 'Data Invalid!'});
   
-  const newEvent  = await serviceEvents.eventAdd(data.data);
+  const newEvent  = await serviceEvents.eventAdd(parseInt(id_user),data.data);
   if(newEvent) return res.status(201).json({event:newEvent});
 
   res.status(500).json({error:'Internal Server Error'})

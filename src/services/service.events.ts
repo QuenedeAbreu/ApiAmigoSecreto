@@ -7,7 +7,8 @@ const prisma = new PrismaClient()
 
 export const eventsGetAll = async (id_user: number,contains?:string,take?:number,skip?:number) => {
   try {
-    return await prisma.event.findMany({
+    const [events,countEvents] = await prisma.$transaction([
+      prisma.event.findMany({
       where: { 
         id_user: id_user,
         title:{
@@ -15,7 +16,11 @@ export const eventsGetAll = async (id_user: number,contains?:string,take?:number
         }},
         take,
         skip
-    });
+    }),
+
+    prisma.event.count({where:{id_user}})
+    ])
+    return {events,countEvents}
   } catch (error) {
     return false;
   }
@@ -30,8 +35,9 @@ export const eventsGetById = async (id: number) => {
 }
 
 type EventCreateData = Prisma.Args<typeof prisma.event, 'create'>['data']
-export const eventAdd = async (data: EventCreateData) => {
+export const eventAdd = async (id_user:number,data: EventCreateData) => {
   try {
+    data.id_user = id_user
     return prisma.event.create({
       data
     })
