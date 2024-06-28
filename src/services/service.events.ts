@@ -18,7 +18,14 @@ export const eventsGetAll = async (id_user: number,contains?:string,take?:number
         skip
     }),
 
-    prisma.event.count({where:{id_user}})
+    prisma.event.count({
+      where:{
+        id_user,
+        title:{
+          contains
+        }
+      }
+    })
     ])
     return {events,countEvents}
   } catch (error) {
