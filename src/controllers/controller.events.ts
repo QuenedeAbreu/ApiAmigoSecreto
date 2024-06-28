@@ -30,8 +30,7 @@ export const eventsAddEvent:RequestHandler = async (req,res) =>{
   const addEventSchema = z.object({
     title: z.string(),
     description: z.string(),
-    grouped: z.boolean(),
-    id_user: z.number().optional()
+    grouped: z.boolean()
   })
   
   // console.log(req.body);
