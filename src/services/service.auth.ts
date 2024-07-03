@@ -44,8 +44,14 @@ export const createToken = (id: number) =>{
 }
 
 export const validadeToken = (token: string) =>{
-  const validToken = jwt.verify(token, fs.readFileSync('./private.key'))
-  return true
+  try {
+    const validToken = jwt.verify(token, fs.readFileSync('./private.key'))
+    return true
+  } catch (error) {
+    return false
+  }
+    
+  // if(!validToken) return false
 }
 
 //Busacar todos os usuairos
