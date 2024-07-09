@@ -24,7 +24,9 @@ export const UserAddFirst:RequestHandler = async (req, res) =>{
     const userSchema = z.object({
       name: z.string(),
       email: z.string().email(),
-      password: z.string()
+      password: z.string(),
+      is_active: z.boolean().optional().default(true),
+      is_admin: z.boolean().optional().default(true)
     })
    
     const body = userSchema.safeParse(req.body)
@@ -55,7 +57,9 @@ export const UserAdd:RequestHandler = async (req,res) =>{
   const userSchema = z.object({
     name: z.string(),
     email: z.string().email(),
-    password: z.string()
+    password: z.string(),
+    is_active: z.boolean().optional().default(true),
+    is_admin: z.boolean().optional().default(false)
   })
   const body = userSchema.safeParse(req.body)
   if(!body.success) return res.status(400).json({message: "Dados Invalidos!"});
