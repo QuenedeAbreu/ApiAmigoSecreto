@@ -93,6 +93,12 @@ export const UserUpdate:RequestHandler = async (req,res) =>{
   const user = await servicesAuth.userGetById(parseInt(id));
   if(!user) return res.status(404).json({message: "Usuario não existe!"});
   
+  //validar de o email informado ja existe se não o email é do proprio usuaior
+  if(body.data.email){
+    const existEmail = await servicesAuth.userGetByEmail(body.data.email);
+    if(existEmail && existEmail.id != parseInt(id)) return res.status(400).json({message: "Email ja existe!"});
+  }
+  
   // Encrypt senha
   if(body.data.password){
     const salt = bcrypt.genSaltSync(parseInt(process.env.SALT_BCRYPT as string));
