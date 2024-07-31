@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import siteRouters from './routers/site.routers';
 import adminRouters from './routers/admin.routers';
+import emailRouters from './routers/email.routers';
 import {requestIntercepter} from './utils/middleware/requestIntercepter';
 
 
@@ -19,5 +20,6 @@ app.all('*',requestIntercepter)
 
 app.use('/',siteRouters)
 app.use('/admin',adminRouters)
+app.use('/email',emailRouters)
 
 export default app;
