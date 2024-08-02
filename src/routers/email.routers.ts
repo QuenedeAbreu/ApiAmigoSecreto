@@ -5,7 +5,7 @@ import {validadeLogin} from '../utils/middleware/validadeLoginMiddleware'
 const router = Router()
 
 
-router.post('/sendemail/:id',validadeLogin,controllerEmail.SendEmail)
+router.post('/resetpassword/:id_user',validadeLogin,controllerEmail.SendEmailResetPassword)
 
 
 

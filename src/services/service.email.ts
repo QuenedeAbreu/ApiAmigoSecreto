@@ -27,11 +27,16 @@ extName: '.hbs'
 transporter.use('compile', hbs(handlebarOptions));
 
 interface EmailContext {
-  title: string;
-  message: string;
+  to:string;
+  subject:string;
+  context:{
+    nameuser: string;
+    linkpasswordreset: string;
+  } 
+
 }
 
-export const sendEmail = async (to: string, subject: string, context: EmailContext) => {
+export const sendEmail = async ({to,subject,context}: EmailContext) => {
   try {
     const mailOptions = {
       from: 'Amigo Oculto <quenede.in@gmail.com>',

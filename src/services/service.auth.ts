@@ -101,6 +101,16 @@ export const userUpdate = async (id:number, user:UserUpdateData) =>{
   }
 }
 
+// Update ResetToken e expireToken
+type UserUpdateResetTokenData = Prisma.Args<typeof prisma.user, 'update'>['data']
+export const setTokenResetPassword = async (id:number, user:UserUpdateResetTokenData) =>{
+  try {
+    return prisma.user.update({where:{id}, data:user})
+  } catch (error) {
+    return false
+  }
+}
+
 //Indativar um usuario
 type UserUpdateStatusData = Prisma.Args<typeof prisma.user, 'update'>['data']
 export const userUpdateStatus = async (id:number, user:UserUpdateStatusData) =>{
