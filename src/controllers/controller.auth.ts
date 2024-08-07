@@ -164,23 +164,23 @@ export const SendEmailForgotPassword:RequestHandler = async (req,res) =>{
   const {resettoken,expiresToken} = generateTokenResetPassword()
     //setar o token e o tempo de expiração do token no banco de dados
     const ResultTokenReset = await servicesUser.setTokenResetPassword(parseInt(id_user),{resettoken,expiresToken})
-  res.status(200).json({ResultTokenReset})
+  // res.status(200).json({ResultTokenReset})
   //enviar email
 
-  // const parametEmail = {
-  //   "to":user.email,
-  //   "subject":"Redefinição de senha",
-  //   "context":{
-  //      "nameuser":user.name,
-  //      "linkpasswordreset":"http://www.teste/"+resettoken
-  //   }
-  //  }
+  const parametEmail = {
+    "to":user.email,
+    "subject":"Redefinição de senha",
+    "context":{
+       "nameuser":user.name,
+       "linkpasswordreset":"http://www.teste/"+resettoken
+    }
+   }
   
   
  
-  // const sendEmail = await servicesAuth.sendEmailForgotPassword(parametEmail)
-  // if(sendEmail) return res.status(200).json({message:"Email enviado com sucesso!"})
-  // res.status(500).json({message:"Internal Server Error"})
+  const sendEmail = await servicesAuth.sendEmailForgotPassword(parametEmail)
+  if(sendEmail) return res.status(200).json({message:"Email enviado com sucesso!"})
+  res.status(500).json({message:"Internal Server Error"})
 }
 //Reset Password
 export const ResetPassword:RequestHandler = async (req, res) =>{
