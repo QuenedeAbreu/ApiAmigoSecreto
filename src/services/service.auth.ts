@@ -3,6 +3,8 @@ import { PrismaClient,Prisma} from "@prisma/client"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import fs from 'fs'
+import transporter from '../modules/mailer'
+
 
 const prisma = new PrismaClient()
 
@@ -120,3 +122,57 @@ export const userUpdateStatus = async (id:number, user:UserUpdateStatusData) =>{
     return false
   }
 }
+
+interface EmailContextResetPassword {
+  to:string;
+  subject:string;
+  context:{
+    nameuser: string;
+    linkpasswordreset: string;
+  } 
+
+}
+
+export const sendEmailForgotPassword = async ({to,subject,context}: EmailContextResetPassword) => {
+  try {
+    const mailOptions = {
+      from: 'Amigo Oculto <quenede.in@gmail.com>',
+      to: to,
+      subject: subject,
+      template: 'senhaView',
+      context: context // passamos o contexto para o template
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email enviado: ' + info.response);
+    return true;
+  } catch (error) {
+    console.error('Erro ao enviar email: ', error);
+    return false;
+  }
+};
+
+export const userGetByResetToken = async (reset_token:string) =>{
+  try {
+    return prisma.user.findFirst({where:{resettoken:reset_token}})
+  } catch (error) {
+    return false
+  }
+}
+
+export const resetPassword = async (id:number, password:string) =>{
+  try {
+    return prisma.user.update({where:{id}, data:{password}})
+  } catch (error) {
+    return false
+  }
+}
+//excluir o token e a data de expiração do banco de dados
+export const deleteTokenResetPassword = async (id:number) =>{
+  try {
+    return prisma.user.update({where:{id}, data:{resettoken:null,expiresToken:null}})
+  } catch (error) {
+    return false
+  }
+}
+

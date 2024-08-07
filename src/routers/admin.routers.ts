@@ -21,6 +21,14 @@ router.put('/user/:id',validadeLogin,controllerAuth.UserUpdate);
 router.put('/user/:id/status',validadeLogin,controllerAuth.UserUpdateStatus);
 
 router.post('/login',controllerAuth.login);
+
+// Reset password 
+router.post('/user/forgotpassword/:id_user',validadeLogin,controllerAuth.SendEmailForgotPassword)
+router.post('/user/resetpassword/:reset_token',controllerAuth.ResetPassword)
+
+
+
+
 // Rotas de eventos
 router.get('/events/user/:id_user',validadeLogin,controllerEvent.eventsGetAll);
 router.get('/events/:id',validadeLogin,controllerEvent.eventsGetById);

@@ -1,7 +1,10 @@
 import { RequestHandler } from "express";
 import { z } from "zod";
 import * as servicesAuth from "../services/service.auth";
+import * as servicesUser from "../services/service.auth";
+import {generateTokenResetPassword} from '../utils/generateTokenResetPassword'
 import bcrypt from "bcrypt";
+import {generateDateEn} from '../utils/getToday'
 
 
 //Pegar todos os usuarios
@@ -148,3 +151,62 @@ export const login:RequestHandler = async (req,res) =>{
   }
   return res.status(403).json(userLogin)
 }
+
+
+//Forgot Password
+export const SendEmailForgotPassword:RequestHandler = async (req,res) =>{
+  const {id_user} = req.params
+  //pesquisar o usuario na base de dados
+  const user = await servicesUser.userGetById(parseInt(id_user))
+
+  if(!user) return res.status(404).json({message:"Usuário não encontrado!"})
+    //gerar token para resetar senha
+  const {resettoken,expiresToken} = generateTokenResetPassword()
+    //setar o token e o tempo de expiração do token no banco de dados
+    const ResultTokenReset = await servicesUser.setTokenResetPassword(parseInt(id_user),{resettoken,expiresToken})
+  res.status(200).json({ResultTokenReset})
+  //enviar email
+
+  // const parametEmail = {
+  //   "to":user.email,
+  //   "subject":"Redefinição de senha",
+  //   "context":{
+  //      "nameuser":user.name,
+  //      "linkpasswordreset":"http://www.teste/"+resettoken
+  //   }
+  //  }
+  
+  
+ 
+  // const sendEmail = await servicesAuth.sendEmailForgotPassword(parametEmail)
+  // if(sendEmail) return res.status(200).json({message:"Email enviado com sucesso!"})
+  // res.status(500).json({message:"Internal Server Error"})
+}
+//Reset Password
+export const ResetPassword:RequestHandler = async (req, res) =>{
+  const {reset_token} = req.params
+  const {password} = req.body
+  
+
+  const user = await servicesUser.userGetByResetToken(reset_token)
+  if(!user) return res.status(404).json({message:"Token invalido!"})
+
+  if(user.expiresToken){
+  if(new Date(user.expiresToken) < new Date(generateDateEn())){
+    return res.status(400).json({message:"Token expirado!"})
+    }  
+  }
+
+  const salt = bcrypt.genSaltSync(parseInt(process.env.SALT_BCRYPT as string));
+  const hash = bcrypt.hashSync(password, salt);
+
+  const resultResetPassword = await servicesUser.resetPassword(user.id, hash)
+  if(resultResetPassword){
+      //excluir o token e a data de expiração do banco de dados
+      const resultDeleteToken = await servicesUser.deleteTokenResetPassword(user.id)
+      if(resultDeleteToken) return res.status(200).json({message:"Senha alterada com sucesso!"})
+  }
+
+  res.status(500).json({message:"Internal Server Error"})
+}
+

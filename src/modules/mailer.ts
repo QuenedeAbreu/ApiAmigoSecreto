@@ -23,34 +23,6 @@ const handlebarOptions: hbs.NodemailerExpressHandlebarsOptions = {
 }, viewPath: 'views/email/', 
 extName: '.hbs'
 };
-
 transporter.use('compile', hbs(handlebarOptions));
 
-interface EmailContext {
-  to:string;
-  subject:string;
-  context:{
-    nameuser: string;
-    linkpasswordreset: string;
-  } 
-
-}
-
-export const sendEmail = async ({to,subject,context}: EmailContext) => {
-  try {
-    const mailOptions = {
-      from: 'Amigo Oculto <quenede.in@gmail.com>',
-      to: to,
-      subject: subject,
-      template: 'senhaView',
-      context: context // passamos o contexto para o template
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email enviado: ' + info.response);
-    return true;
-  } catch (error) {
-    console.error('Erro ao enviar email: ', error);
-    return false;
-  }
-};
+export default transporter
