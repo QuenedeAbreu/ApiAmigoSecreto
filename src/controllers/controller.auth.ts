@@ -196,7 +196,7 @@ export const ResetPassword:RequestHandler = async (req, res) =>{
     return res.status(400).json({message:"Token expirado!"})
     }  
   }
-
+  if(password){
   const salt = bcrypt.genSaltSync(parseInt(process.env.SALT_BCRYPT as string));
   const hash = bcrypt.hashSync(password, salt);
 
@@ -205,8 +205,8 @@ export const ResetPassword:RequestHandler = async (req, res) =>{
       //excluir o token e a data de expiração do banco de dados
       const resultDeleteToken = await servicesUser.deleteTokenResetPassword(user.id)
       if(resultDeleteToken) return res.status(200).json({message:"Senha alterada com sucesso!"})
-  }
+  }}
+  return res.status(200).json({message:"Token Valido!"})
 
-  res.status(500).json({message:"Internal Server Error"})
 }
 
