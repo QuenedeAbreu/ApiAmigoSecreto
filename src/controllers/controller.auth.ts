@@ -87,7 +87,9 @@ export const UserUpdate:RequestHandler = async (req,res) =>{
   const updateUserSchema = z.object({
     name: z.string().optional(),
     email: z.string().email().optional(),
-    password: z.string().optional()
+    password: z.string().optional(),
+    is_active: z.boolean().optional(),
+    is_admin: z.boolean().optional()
   })
   const body = updateUserSchema.safeParse(req.body)
   if(!body.success) return res.status(400).json({message: "Dados Invalidos!"});
