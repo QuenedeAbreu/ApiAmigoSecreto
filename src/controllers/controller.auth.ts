@@ -36,6 +36,7 @@ export const UserAddFirst:RequestHandler = async (req, res) =>{
     if(!body.success) return res.status(400).json({message: "Dados Invalidos!"});
 
     //Validar se ja existe usuario
+    //Verificar se a validação está certa
     const existUser = await servicesAuth.userGetAll();
     if(existUser != false || existUser == null) return res.status(308).json({message: "Já existe usuáriario cadastrado. Use a rota Principal!"})
     

@@ -6,9 +6,23 @@ import * as controllerEvent from '../controllers/controller.events';
 import * as controllerGroup from '../controllers/controller.groups';
 import * as controllerPeople from '../controllers/controller.people';
 
+// Rota de nomes de crianças
+import * as controllerNamekid from '../controllers/controller.namekid';
+
 
 
 const router = Router();
+//Rotas de nomes de crianças
+router.get('/namekid', validadeLogin,controllerNamekid.NamekidGetAll)
+router.get('/namekid/:id', validadeLogin, controllerNamekid.NamekidGetById)
+router.post('/namekid/user/:id_user', validadeLogin, controllerNamekid.NamekidAdd)
+router.put('/namekid/:id/user/:id_user', validadeLogin, controllerNamekid.NamekidUpdate)
+router.delete('/namekid/:id/user/:id_user', validadeLogin, controllerNamekid.NamekidDelete)
+
+
+
+
+
 
 //Rotas usuario
 router.get('/verifyexistsuser',controllerAuth.verifyExistsUser)

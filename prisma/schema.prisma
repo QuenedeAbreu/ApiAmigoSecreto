@@ -21,6 +21,8 @@ model User {
   resettoken   String?
   expiresToken DateTime?
   Event        Event[]
+
+  NameKid NameKid[]
 }
 
 model Event {
@@ -56,4 +58,14 @@ model EventPeople {
 
   //Relação com Grupo
   group EventGroup? @relation(fields: [id_group], references: [id])
+}
+
+//Apenas temporario
+model NameKid {
+  id             Int      @id @default(autoincrement())
+  id_user        Int
+  suggested_name String
+  sex            Int
+  User           User?    @relation(fields: [id_user], references: [id])
+  createdAt      DateTime @default(now())
 }
