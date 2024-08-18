@@ -13,7 +13,7 @@ type returnValidadeLogin = {
   is_login:boolean,
   id?:number,
   message?:string,
-  user?:{name:string,email:string}
+  user?:{name:string,email:string,is_admin:boolean}
 }
 export const validadeLogin = async (data:LoginUser ):Promise<returnValidadeLogin> =>{
     const {email,password} = data
@@ -32,7 +32,8 @@ export const validadeLogin = async (data:LoginUser ):Promise<returnValidadeLogin
         id:user.id,
         user:{
           name:user.name,
-          email:user.email
+          email:user.email,
+          is_admin:user.is_admin
         }
       }
 

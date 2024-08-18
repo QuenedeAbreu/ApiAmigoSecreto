@@ -175,7 +175,7 @@ export const SendEmailForgotPassword:RequestHandler = async (req,res) =>{
     "subject":"Redefinição de senha",
     "context":{
        "nameuser":user.name,
-       "linkpasswordreset":"http://www.teste/"+resettoken
+       "linkpasswordreset":"http://localhost:3001/resetpassword/"+resettoken
     }
    }
   
