@@ -5,6 +5,9 @@ import * as servicesUser from "../services/service.auth";
 import {generateTokenResetPassword} from '../utils/generateTokenResetPassword'
 import bcrypt from "bcrypt";
 import {generateDateEn} from '../utils/getToday'
+import jwt from "jsonwebtoken";
+import fs from 'fs'
+import { User } from "@prisma/client";
 
 
 //Pegar todos os usuarios
@@ -20,6 +23,31 @@ export const UserGetById:RequestHandler = async (req,res) =>{
   if(!user) return res.status(404).json({message: "Usuario não existe!"})
   if(user) return res.status(200).json({user:user});
   res.status(500).json({message:"Internal Server Error"})
+}
+
+// verificar se o usuario e admim ou nao pelo token 
+export const isTokenvalid:RequestHandler = async (req, res) =>{
+  const tokenUser = req.headers.authorization;
+  //desencriptar o teken
+  if(tokenUser){
+    const token = tokenUser.split(" ")[1];
+    const secret = fs.readFileSync('./private.key')
+    // Verificar e decodificar o token
+    jwt.verify(token, secret, async (err, decoded) => {
+      if (err) {
+        return res.status(500).json({'message': err });
+      } else {
+        const jsonString = JSON.stringify(decoded, null, 2);
+        const json = JSON.parse(jsonString)
+         const user =  <User> await servicesAuth.userGetById(parseInt(json.id)) 
+       
+        return res.status(200).json({'isTokenValid':true , 'admin': user.is_admin});
+      }
+    });
+  }
+
+
+
 }
 
 //Adcionar o primeior Usuario
@@ -155,7 +183,6 @@ export const login:RequestHandler = async (req,res) =>{
   return res.status(403).json(userLogin)
 }
 
-
 //Forgot Password
 export const SendEmailForgotPassword:RequestHandler = async (req,res) =>{
   const {id_user} = req.params
@@ -179,8 +206,6 @@ export const SendEmailForgotPassword:RequestHandler = async (req,res) =>{
     }
    }
   
-  
- 
   const sendEmail = await servicesAuth.sendEmailForgotPassword(parametEmail)
   if(sendEmail) return res.status(200).json({message:"Email enviado com sucesso!"})
   res.status(500).json({message:"Internal Server Error"})

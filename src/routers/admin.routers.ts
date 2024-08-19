@@ -66,9 +66,10 @@ router.delete('/events/:id_event/groups/:id_group/people/:id',validadeLogin,cont
 
 
 
-router.get('/isTokenValid',validadeLogin, (req, res) => {
-  res.json({isTokenValid:true,admin:true});
-});
+// router.get('/isTokenValid',validadeLogin, (req, res) => {
+//   res.json({isTokenValid:true,admin:true});
+// });
+router.get('/isTokenValid',validadeLogin,controllerAuth.isTokenvalid);
 
 
 
