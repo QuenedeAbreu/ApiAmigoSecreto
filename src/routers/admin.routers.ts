@@ -20,10 +20,6 @@ router.put('/namekid/:id/user/:id_user', validadeLogin, controllerNamekid.Nameki
 router.delete('/namekid/:id/user/:id_user', validadeLogin, controllerNamekid.NamekidDelete)
 
 
-
-
-
-
 //Rotas usuario
 router.get('/verifyexistsuser',controllerAuth.verifyExistsUser)
 router.post('/firstregister',controllerAuth.UserAddFirst)

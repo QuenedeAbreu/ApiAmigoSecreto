@@ -89,7 +89,7 @@ export const doMatch = async (id: number): Promise<boolean> => {
         keepTrying = false;
         attempts++;
         sortedList=[]
-        sortable = peopleList.map(item =>item.id);
+        sortable = peopleList.map((item: { id: number }) =>item.id);
 
         for(let i in peopleList){
           let sortableFiltered: number[] = sortable;
@@ -97,7 +97,7 @@ export const doMatch = async (id: number): Promise<boolean> => {
           if(eventItem.grouped === true){
 
             sortableFiltered = sortable.filter(sortableItem=>{
-              let sortablePerson = peopleList.find(item => item.id === sortableItem);
+              let sortablePerson = peopleList.find((item: { id: number }) => item.id === sortableItem);
               return peopleList[i].id_group !== sortablePerson?.id_group;
 
             })

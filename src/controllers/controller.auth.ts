@@ -57,7 +57,8 @@ export const UserAddFirst:RequestHandler = async (req, res) =>{
       email: z.string().email(),
       password: z.string(),
       is_active: z.boolean().optional().default(true),
-      is_admin: z.boolean().optional().default(true)
+      is_admin: z.boolean().optional().default(true),
+      is_acessall: z.boolean().optional().default(true)
     })
    
     const body = userSchema.safeParse(req.body)
@@ -91,7 +92,8 @@ export const UserAdd:RequestHandler = async (req,res) =>{
     email: z.string().email(),
     password: z.string(),
     is_active: z.boolean().optional().default(true),
-    is_admin: z.boolean().optional().default(false)
+    is_admin: z.boolean().optional().default(false),
+    is_acessall: z.boolean().optional().default(true)
   })
   const body = userSchema.safeParse(req.body)
   if(!body.success) return res.status(400).json({message: "Dados Invalidos!"});
@@ -100,6 +102,9 @@ export const UserAdd:RequestHandler = async (req,res) =>{
   const user = await servicesAuth.userGetByEmail(body.data.email);
   if(user) return res.status(400).json({message: "Usuario ja existe!"});
   
+  //criar token qual o is_acessall for false
+  
+
   const salt = bcrypt.genSaltSync(parseInt(process.env.SALT_BCRYPT as string));
   const hash = bcrypt.hashSync(body.data.password, salt);
   body.data.password = hash;
@@ -118,7 +123,8 @@ export const UserUpdate:RequestHandler = async (req,res) =>{
     email: z.string().email().optional(),
     password: z.string().optional(),
     is_active: z.boolean().optional(),
-    is_admin: z.boolean().optional()
+    is_admin: z.boolean().optional(),
+    is_acessall: z.boolean().optional()
   })
   const body = updateUserSchema.safeParse(req.body)
   if(!body.success) return res.status(400).json({message: "Dados Invalidos!"});

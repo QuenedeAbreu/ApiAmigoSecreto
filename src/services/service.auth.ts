@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import fs from 'fs'
 import transporter from '../modules/mailer'
+import {generateTokenResetPassword} from '../utils/generateTokenResetPassword'
 
 
 const prisma = new PrismaClient()
@@ -13,11 +14,17 @@ type returnValidadeLogin = {
   is_login:boolean,
   id?:number,
   message?:string,
-  user?:{name:string,email:string,is_admin:boolean}
+  user?:{name:string,email:string,is_admin:boolean,is_acessall:Boolean}
 }
 export const validadeLogin = async (data:LoginUser ):Promise<returnValidadeLogin> =>{
     const {email,password} = data
     const user = await userGetByEmail(email)
+    if(user){
+      if(!user.is_acessall) return {
+        is_login:false,
+        message:"Este tipo de usuário não pode logar por está pagina!"
+      }
+    }
     if(!user) return {
         is_login:false,
         message:"Email ou senha incorreto!"
@@ -33,7 +40,8 @@ export const validadeLogin = async (data:LoginUser ):Promise<returnValidadeLogin
         user:{
           name:user.name,
           email:user.email,
-          is_admin:user.is_admin
+          is_admin:user.is_admin,
+          is_acessall:user.is_acessall
         }
       }
 
@@ -88,6 +96,8 @@ export const userGetById = async (id:number) =>{
 type UserCreateData = Prisma.Args<typeof prisma.user, 'create'>['data']
 export const userAdd = async (user:UserCreateData) =>{
   try {
+    const {resettoken} = generateTokenResetPassword()
+    user.nametoken = resettoken
     return prisma.user.create({data:user})
   } catch (error) {
     return false

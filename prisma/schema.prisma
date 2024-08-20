@@ -18,6 +18,8 @@ model User {
   password     String
   is_active    Boolean   @default(true)
   is_admin     Boolean
+  is_acessall  Boolean   @default(false)
+  nametoken    String?
   resettoken   String?
   expiresToken DateTime?
   Event        Event[]
