@@ -48,6 +48,38 @@ export const validadeLogin = async (data:LoginUser ):Promise<returnValidadeLogin
   return {is_login:false,message:"Email ou senha incorreto!"}
 }
 
+type LoginUserFromTokenname = {tokenName:string}
+export const validadeLoginFromTokenname = async (data:LoginUserFromTokenname ):Promise<returnValidadeLogin > =>{
+  const {tokenName} = data
+  // const user = await userGetByEmail(email)
+  if(user){
+    if(!user.is_acessall) return {
+      is_login:false,
+      message:"Este tipo de usuário não pode logar por está pagina!"
+    }
+  }
+  if(!user) return {
+      is_login:false,
+      message:"Email ou senha incorreto!"
+    }
+  const resultPassword = await bcrypt.compare(password,user.password)
+    if(resultPassword && !user.is_active) return {
+      is_login:false,
+      message:"Usuario não está ativo!"
+    }
+    if(resultPassword) return {
+      is_login:true,
+      id:user.id,
+      user:{
+        name:user.name,
+        email:user.email,
+        is_admin:user.is_admin,
+        is_acessall:user.is_acessall
+      }
+    }
+    return {is_login:false,message:"Email ou senha incorreto!"}
+  }
+
 export const createToken = (id: number) =>{
   const privateKey = fs.readFileSync('./private.key')
   const jwtToken = jwt.sign({id},privateKey,{algorithm:'RS256'})

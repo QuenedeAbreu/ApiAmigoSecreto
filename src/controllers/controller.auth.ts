@@ -45,9 +45,6 @@ export const isTokenvalid:RequestHandler = async (req, res) =>{
       }
     });
   }
-
-
-
 }
 
 //Adcionar o primeior Usuario
@@ -188,6 +185,7 @@ export const login:RequestHandler = async (req,res) =>{
   }
   return res.status(403).json(userLogin)
 }
+//login por token 
 
 //Forgot Password
 export const SendEmailForgotPassword:RequestHandler = async (req,res) =>{
@@ -242,5 +240,25 @@ export const ResetPassword:RequestHandler = async (req, res) =>{
   }}
   return res.status(200).json({message:"Token Valido!"})
 
+}
+
+
+// verificar se o usuario e admim ou nao pelo token 
+export const loginFromTokenName:RequestHandler = async (req, res) =>{
+  const tokenName = req.params.tokenname;
+  const loginSchema = z.object({
+    tokenName: z.string()
+  })
+  const body = loginSchema.safeParse(req.body)
+  if(!body.success) return res.status(400).json({message: "Dados Invalidos!"});
+
+  //Validar senha e gerar o Token 
+  const userLogin = await servicesAuth.validadeLoginFromTokenname(body.data)
+  if(userLogin.is_login){
+    if(userLogin.id){
+    return res.status(200).json({token: servicesAuth.createToken(userLogin.id),user:userLogin.user})
+    }
+  }
+  return res.status(403).json(userLogin)
 }
 
