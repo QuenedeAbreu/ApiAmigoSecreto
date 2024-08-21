@@ -57,6 +57,10 @@ export const validadeLoginFromTokenname = async (data:LoginUserFromTokenname ):P
       is_login:false,
       message:"Token inegistente / usuário não encontrado!"
     }
+    if( !user.is_active) return {
+      is_login:false,
+      message:"Usuario não está ativo!"
+    }
   
     if(user) return {
       is_login:true,
