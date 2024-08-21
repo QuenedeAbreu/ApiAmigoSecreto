@@ -48,26 +48,17 @@ export const validadeLogin = async (data:LoginUser ):Promise<returnValidadeLogin
   return {is_login:false,message:"Email ou senha incorreto!"}
 }
 
-type LoginUserFromTokenname = {tokenName:string}
+type LoginUserFromTokenname = {tokenname:string}
 export const validadeLoginFromTokenname = async (data:LoginUserFromTokenname ):Promise<returnValidadeLogin > =>{
-  const {tokenName} = data
-  // const user = await userGetByEmail(email)
-  if(user){
-    if(!user.is_acessall) return {
-      is_login:false,
-      message:"Este tipo de usuário não pode logar por está pagina!"
-    }
-  }
+  const {tokenname} = data
+   const user = await userGetByTokenName(tokenname)
+ 
   if(!user) return {
       is_login:false,
-      message:"Email ou senha incorreto!"
+      message:"Token inegistente / usuário não encontrado!"
     }
-  const resultPassword = await bcrypt.compare(password,user.password)
-    if(resultPassword && !user.is_active) return {
-      is_login:false,
-      message:"Usuario não está ativo!"
-    }
-    if(resultPassword) return {
+  
+    if(user) return {
       is_login:true,
       id:user.id,
       user:{
@@ -101,6 +92,15 @@ export const validadeToken = (token: string) =>{
 export const userGetAll = async () =>{
   try {
     return prisma.user.findMany()
+  } catch (error) {
+    return false
+  }
+}
+
+//Buscar um usuario pelo tokenname
+export const userGetByTokenName = async (nametoken:string) =>{
+  try {
+    return prisma.user.findFirst({where:{nametoken}})
   } catch (error) {
     return false
   }

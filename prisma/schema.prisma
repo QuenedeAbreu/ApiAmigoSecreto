@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
@@ -18,13 +15,12 @@ model User {
   password     String
   is_active    Boolean   @default(true)
   is_admin     Boolean
-  is_acessall  Boolean   @default(false)
-  nametoken    String?
   resettoken   String?
   expiresToken DateTime?
+  is_acessall  Boolean   @default(false)
+  nametoken    String?
   Event        Event[]
-
-  NameKid NameKid[]
+  NameKid      NameKid[]
 }
 
 model Event {
@@ -37,37 +33,41 @@ model Event {
   User        User?         @relation(fields: [id_user], references: [id])
   EventGroup  EventGroup[]
   EventPeople EventPeople[]
+
+  @@index([id_user], map: "Event_id_user_fkey")
 }
 
 model EventGroup {
   id          Int           @id @default(autoincrement())
   id_event    Int
   name        String
-  // Relação com Evento
-  event       Event?        @relation(fields: [id_event], references: [id])
+  event       Event         @relation(fields: [id_event], references: [id])
   EventPeople EventPeople[]
+
+  @@index([id_event], map: "EventGroup_id_event_fkey")
 }
 
 model EventPeople {
-  id       Int    @id @default(autoincrement())
+  id       Int        @id @default(autoincrement())
   id_event Int
   id_group Int
   name     String
   cpf      String
-  matched  String @default("")
-  // Relação com Evento
-  event    Event? @relation(fields: [id_event], references: [id])
+  matched  String     @default("")
+  event    Event      @relation(fields: [id_event], references: [id])
+  group    EventGroup @relation(fields: [id_group], references: [id])
 
-  //Relação com Grupo
-  group EventGroup? @relation(fields: [id_group], references: [id])
+  @@index([id_event], map: "EventPeople_id_event_fkey")
+  @@index([id_group], map: "EventPeople_id_group_fkey")
 }
 
-//Apenas temporario
 model NameKid {
   id             Int      @id @default(autoincrement())
   id_user        Int
   suggested_name String
   sex            Int
-  User           User?    @relation(fields: [id_user], references: [id])
   createdAt      DateTime @default(now())
+  User           User?    @relation(fields: [id_user], references: [id])
+
+  @@index([id_user], map: "NameKid_id_user_fkey")
 }

@@ -20,6 +20,7 @@ router.put('/namekid/:id/user/:id_user', validadeLogin, controllerNamekid.Nameki
 router.delete('/namekid/:id/user/:id_user', validadeLogin, controllerNamekid.NamekidDelete)
 
 
+
 //Rotas usuario
 router.get('/verifyexistsuser',controllerAuth.verifyExistsUser)
 router.post('/firstregister',controllerAuth.UserAddFirst)
@@ -30,6 +31,8 @@ router.get('/user/:id',validadeLogin,controllerAuth.UserGetById);
 router.put('/user/:id',validadeLogin,controllerAuth.UserUpdate);
 router.put('/user/:id/status',validadeLogin,controllerAuth.UserUpdateStatus);
 
+//Login 
+router.post('/logintokenname/:tokenname',controllerAuth.loginFromTokenName)
 router.post('/login',controllerAuth.login);
 
 // Reset password 

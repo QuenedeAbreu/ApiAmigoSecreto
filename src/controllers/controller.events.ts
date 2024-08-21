@@ -36,7 +36,7 @@ export const eventsAddEvent:RequestHandler = async (req,res) =>{
   // console.log(req.body);
   const data = addEventSchema.safeParse(req.body);
   // console.log(data);
-  if(!data.success) return res.status(400).json({error: 'Data Invalid!'});
+  if(!data.success) return res.status(400).json({error: 'Data Invalido!'});
   
   const newEvent  = await serviceEvents.eventAdd(parseInt(id_user),data.data);
   if(newEvent) return res.status(201).json({event:newEvent});

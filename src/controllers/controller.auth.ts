@@ -243,17 +243,16 @@ export const ResetPassword:RequestHandler = async (req, res) =>{
 }
 
 
-// verificar se o usuario e admim ou nao pelo token 
+// Login pelo tooken
 export const loginFromTokenName:RequestHandler = async (req, res) =>{
-  const tokenName = req.params.tokenname;
-  const loginSchema = z.object({
-    tokenName: z.string()
+  const loginFromTokennameSchema = z.object({
+    tokenname: z.string()
   })
-  const body = loginSchema.safeParse(req.body)
-  if(!body.success) return res.status(400).json({message: "Dados Invalidos!"});
+  const params = loginFromTokennameSchema.safeParse(req.params)
+  if(!params.success) return res.status(400).json({message: "Dados Invalidos!"});
 
   //Validar senha e gerar o Token 
-  const userLogin = await servicesAuth.validadeLoginFromTokenname(body.data)
+  const userLogin = await servicesAuth.validadeLoginFromTokenname(params.data)
   if(userLogin.is_login){
     if(userLogin.id){
     return res.status(200).json({token: servicesAuth.createToken(userLogin.id),user:userLogin.user})
