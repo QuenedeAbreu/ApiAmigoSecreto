@@ -41,7 +41,7 @@ export const isTokenvalid:RequestHandler = async (req, res) =>{
         const json = JSON.parse(jsonString)
          const user =  <User> await servicesAuth.userGetById(parseInt(json.id)) 
        
-        return res.status(200).json({'isTokenValid':true , 'admin': user.is_admin});
+        return res.status(200).json({'isTokenValid':true , 'admin': user.is_admin,'acessall':user.is_acessall});
       }
     });
   }
