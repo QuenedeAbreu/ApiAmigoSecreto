@@ -22,7 +22,8 @@ export const NamekidAdd:RequestHandler = async (req, res) =>{
   const id_user = req.params.id_user;
   const nameSchema = z.object({
     suggested_name: z.string(),
-    sex:z.number()
+    sex:z.number(),
+    descriptionName: z.string().optional()
   })
   const body = nameSchema.safeParse(req.body)
   if(!body.success) return res.status(400).json({message: "Dados Invalidos!"});
@@ -39,7 +40,8 @@ export const NamekidUpdate:RequestHandler = async (req, res) =>{
   const id_user = req.params.id_user;
   const nameSchema = z.object({
     suggested_name: z.string().optional(),
-    sex:z.number().optional()
+    sex:z.number().optional(),
+    descriptionName: z.string().optional()
   })
   const nameResult = await servicesNamekid.getNameKidById(parseInt(id));
   if(!nameResult) return res.status(404).json({message: "Nome de criança não existe!"})

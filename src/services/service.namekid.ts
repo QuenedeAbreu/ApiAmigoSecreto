@@ -5,7 +5,11 @@ const prisma = new PrismaClient()
 //Buscar todos os nomes de crianças
 export const getAllNameKid = async () =>{
   try {
-    return await prisma.nameKid.findMany()
+    return await prisma.nameKid.findMany({
+      include: {
+        User: true,
+      },
+    })
   } catch (error) {
     return false
   }
@@ -14,7 +18,11 @@ export const getAllNameKid = async () =>{
 // Buscar nome de criança por id
 export const getNameKidById = async (id:number) =>{
   try {
-    return await prisma.nameKid.findUnique({where:{id}})
+    return await prisma.nameKid.findUnique({
+      where:{id}, 
+      include: {
+      User: true,
+    },})
   } catch (error) {
     return false
   }

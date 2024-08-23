@@ -66,6 +66,7 @@ model NameKid {
   id_user        Int
   suggested_name String
   sex            Int
+  description    String?
   createdAt      DateTime @default(now())
   User           User?    @relation(fields: [id_user], references: [id])
 
