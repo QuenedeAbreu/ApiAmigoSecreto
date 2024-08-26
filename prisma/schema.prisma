@@ -30,7 +30,7 @@ model Event {
   description String
   grouped     Boolean       @default(false)
   id_user     Int
-  User        User?         @relation(fields: [id_user], references: [id])
+  User        User          @relation(fields: [id_user], references: [id])
   EventGroup  EventGroup[]
   EventPeople EventPeople[]
 
@@ -66,9 +66,9 @@ model NameKid {
   id_user        Int
   suggested_name String
   sex            Int
-  description    String?
   createdAt      DateTime @default(now())
-  User           User?    @relation(fields: [id_user], references: [id])
+  description    String?
+  User           User     @relation(fields: [id_user], references: [id])
 
   @@index([id_user], map: "NameKid_id_user_fkey")
 }

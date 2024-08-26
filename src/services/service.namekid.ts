@@ -31,6 +31,7 @@ export const getNameKidById = async (id:number) =>{
 //Adicionar um nome de criança
 type nameKidCreateData = Prisma.Args<typeof prisma.nameKid, 'create'>['data']
 export const createNameKid = async (id_user:number,data:nameKidCreateData) =>{
+  console.log(data);
   try {
     data.id_user = id_user
     return await prisma.nameKid.create({data})
