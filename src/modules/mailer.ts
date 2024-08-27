@@ -23,6 +23,6 @@ const handlebarOptions: hbs.NodemailerExpressHandlebarsOptions = {
 }, viewPath: 'views/email/', 
 extName: '.hbs'
 };
-// transporter.use('compile', hbs(handlebarOptions));
+transporter.use('compile', hbs(handlebarOptions));
 
 export default transporter
