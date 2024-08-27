@@ -88,7 +88,7 @@ export const verifyExistsUser:RequestHandler = async (req, res) =>{
 export const UserAdd:RequestHandler = async (req,res) =>{
   const userSchema = z.object({
     name: z.string(),
-    email: z.string().email(),
+    email: z.string().email().transform(s => s.toLocaleLowerCase()),
     password: z.string(),
     is_active: z.boolean().optional().default(true),
     is_admin: z.boolean().optional().default(false),
