@@ -6,7 +6,6 @@ import jwt from 'jsonwebtoken'
 import fs from 'fs'
 import transporter from '../modules/mailer'
 import {generateTokenResetPassword} from '../utils/generateTokenResetPassword'
-import path from "path";
 
 
 const prisma = new PrismaClient()
@@ -190,7 +189,7 @@ export const sendEmailForgotPassword = async ({to,subject,context}: EmailContext
       from: 'Amigo Oculto <quenede.in@gmail.com>',
       to: to,
       subject: subject,
-      template:path.join(__dirname, 'views', 'email', 'senhaView.hbs'),
+      template: 'senhaView',
       context: context // passamos o contexto para o template
     };
 
