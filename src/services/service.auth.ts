@@ -190,7 +190,7 @@ export const sendEmailForgotPassword = async ({to,subject,context}: EmailContext
       from: 'Amigo Oculto <quenede.in@gmail.com>',
       to: to,
       subject: subject,
-      template:path.join('senhaView'),
+      template:path.join(__dirname, 'views', 'email', 'senhaView.hbs'),
       context: context // passamos o contexto para o template
     };
 
