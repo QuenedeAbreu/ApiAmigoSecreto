@@ -1,4 +1,5 @@
 import { getToday } from "../utils/getToday"
+import 'dotenv/config';
 import { PrismaClient,Prisma} from "@prisma/client"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
@@ -76,14 +77,16 @@ export const validadeLoginFromTokenname = async (data:LoginUserFromTokenname ):P
   }
 
 export const createToken = (id: number) =>{
-  const privateKey = fs.readFileSync('private.key')
+  // const privateKey = fs.readFileSync('private.key')
+  const privateKey = process.env.DEFAULT_TOKEN_CRYPTO as string
   const jwtToken = jwt.sign({id},privateKey,{algorithm:'RS256'})
   return jwtToken
 }
 
 export const validadeToken = (token: string) =>{
   try {
-    const validToken = jwt.verify(token, fs.readFileSync('private.key'))
+    // const validToken = jwt.verify(token, fs.readFileSync('private.key'))
+    const validToken = jwt.verify(token, process.env.DEFAULT_TOKEN_CRYPTO as string)
     return true
   } catch (error) {
     return false
