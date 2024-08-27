@@ -76,14 +76,14 @@ export const validadeLoginFromTokenname = async (data:LoginUserFromTokenname ):P
   }
 
 export const createToken = (id: number) =>{
-  const privateKey = fs.readFileSync('../private.key')
+  const privateKey = fs.readFileSync('private.key')
   const jwtToken = jwt.sign({id},privateKey,{algorithm:'RS256'})
   return jwtToken
 }
 
 export const validadeToken = (token: string) =>{
   try {
-    const validToken = jwt.verify(token, fs.readFileSync('../private.key'))
+    const validToken = jwt.verify(token, fs.readFileSync('private.key'))
     return true
   } catch (error) {
     return false
