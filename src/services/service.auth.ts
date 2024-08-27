@@ -202,6 +202,35 @@ export const sendEmailForgotPassword = async ({to,subject,context}: EmailContext
   }
 };
 
+
+interface EmailContextCreateUser{
+  to:string;
+  subject:string;
+  context:{
+    nameuser: string;
+    link: string;
+  } 
+
+}
+export const sendEmailNewUserName = async ({to,subject,context}: EmailContextCreateUser) => {
+  try {
+    const mailOptions = {
+      from: 'Sugestão de Nome <quenede.in@gmail.com>',
+      to: to,
+      subject: subject,
+      template: 'nomeView',
+      context: context // passamos o contexto para o template
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email enviado: ' + info.response);
+    return true;
+  } catch (error) {
+    console.error('Erro ao enviar email: ', error);
+    return false;
+  }
+};
+
 export const userGetByResetToken = async (reset_token:string) =>{
   try {
     return prisma.user.findFirst({where:{resettoken:reset_token}})

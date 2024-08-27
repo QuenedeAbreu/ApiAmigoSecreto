@@ -103,13 +103,27 @@ export const UserAdd:RequestHandler = async (req,res) =>{
   
   //criar token qual o is_acessall for false
   
-
   const salt = bcrypt.genSaltSync(parseInt(process.env.SALT_BCRYPT as string));
   const hash = bcrypt.hashSync(body.data.password, salt);
   body.data.password = hash;
 
   //Adicionar um novo usuario
   const newUser = await servicesAuth.userAdd(body.data);
+  if(newUser){
+  //Enviar email
+  const parametEmail = {
+    "to":newUser.email,
+    "subject":"Sugestão de Nome",
+    "context":{
+       "nameuser":newUser.name,
+       "link":process.env.FRONTEND+'/name/'+newUser.nametoken
+    }
+   }
+  
+  const sendEmail = await servicesAuth.sendEmailNewUserName(parametEmail)
+  if(sendEmail) console.log('Email de usuário enviado!');
+  }
+
   if(newUser) return res.status(201).json({user:newUser});
   res.status(500).json({message:"Internal Server Error"})
 }
