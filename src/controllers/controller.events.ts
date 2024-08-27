@@ -30,7 +30,9 @@ export const eventsAddEvent:RequestHandler = async (req,res) =>{
   const addEventSchema = z.object({
     title: z.string(),
     description: z.string(),
-    grouped: z.boolean()
+    grouped: z.boolean(),
+    id_user: z.number().default(parseInt(id_user)),
+
   })
   
   // console.log(req.body);
@@ -38,7 +40,7 @@ export const eventsAddEvent:RequestHandler = async (req,res) =>{
   // console.log(data);
   if(!data.success) return res.status(400).json({error: 'Data Invalido!'});
   
-  const newEvent  = await serviceEvents.eventAdd(parseInt(id_user),data.data);
+  const newEvent  = await serviceEvents.eventAdd(data.data);
   if(newEvent) return res.status(201).json({event:newEvent});
 
   res.status(500).json({error:'Internal Server Error'})

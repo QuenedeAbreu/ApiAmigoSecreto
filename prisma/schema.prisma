@@ -66,8 +66,8 @@ model NameKid {
   id_user        Int
   suggested_name String
   sex            Int
-  createdAt      DateTime @default(now())
   description    String?
+  createdAt      DateTime @default(now())
   User           User     @relation(fields: [id_user], references: [id])
 
   @@index([id_user], map: "NameKid_id_user_fkey")

@@ -42,9 +42,9 @@ export const eventsGetById = async (id: number) => {
 }
 
 type EventCreateData = Prisma.Args<typeof prisma.event, 'create'>['data']
-export const eventAdd = async (id_user:number,data: EventCreateData) => {
+export const eventAdd = async (data: EventCreateData) => {
   try {
-    data.id_user = id_user
+    // data.id_user = id_user
     return prisma.event.create({
       data
     })
