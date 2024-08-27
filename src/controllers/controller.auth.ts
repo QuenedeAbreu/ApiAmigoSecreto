@@ -31,7 +31,9 @@ export const isTokenvalid:RequestHandler = async (req, res) =>{
   //desencriptar o teken
   if(tokenUser){
     const token = tokenUser.split(" ")[1];
-    const secret = fs.readFileSync('../private.key')
+    // const secret = fs.readFileSync('../private.key')
+    const secret = process.env.DEFAULT_TOKEN_CRYPTO as string
+
     // Verificar e decodificar o token
     jwt.verify(token, secret, async (err, decoded) => {
       if (err) {
