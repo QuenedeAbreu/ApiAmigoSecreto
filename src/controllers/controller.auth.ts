@@ -222,7 +222,7 @@ export const SendEmailForgotPassword:RequestHandler = async (req,res) =>{
     "subject":"Redefinição de senha",
     "context":{
        "nameuser":user.name,
-       "linkpasswordreset":"http://localhost:3001/resetpassword/"+resettoken
+       "linkpasswordreset":process.env.FRONTEND+"/resetpassword/"+resettoken
     }
    }
   
