@@ -70,6 +70,11 @@ router.delete('/events/:id_event/groups/:id_group/people/:id',validadeLogin,cont
 // });
 router.get('/isTokenValid',validadeLogin,controllerAuth.isTokenvalid);
 
+// deploy
+router.post('/deploy', (req, res) => {
+  res.status(200).send('Deployment started');
+  // http://168.75.100.166:3000/api/box/deploy/4983edd12231c72823d7f54948c8903f62a0ea79ea99c351
+});
 
 
 export default router;
