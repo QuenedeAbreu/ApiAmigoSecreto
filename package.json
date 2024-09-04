@@ -29,7 +29,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@prisma/client": "^5.7.0",
+    "@prisma/client": "^5.19.1",
     "@types/jsonwebtoken": "^9.0.5",
     "apiamigosecreto": "file:",
     "bcrypt": "^5.1.1",

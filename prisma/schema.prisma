@@ -21,6 +21,8 @@ model User {
   nametoken    String?
   Event        Event[]
   NameKid      NameKid[]
+
+  VoteNameKid VoteNameKid[]
 }
 
 model Event {
@@ -70,5 +72,17 @@ model NameKid {
   createdAt      DateTime @default(now())
   User           User     @relation(fields: [id_user], references: [id])
 
+  VoteNameKid VoteNameKid[]
+
   @@index([id_user], map: "NameKid_id_user_fkey")
+}
+
+model VoteNameKid {
+  id        Int      @id @default(autoincrement())
+  id_user   Int
+  id_name   Int
+  vote      Boolean  @default(true)
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [id_user], references: [id])
+  NameKid   NameKid  @relation(fields: [id_name], references: [id])
 }

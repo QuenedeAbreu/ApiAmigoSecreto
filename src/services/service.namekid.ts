@@ -5,12 +5,40 @@ const prisma = new PrismaClient()
 //Buscar todos os nomes de crianças
 export const getAllNameKid = async () =>{
   try {
-    return await prisma.nameKid.findMany({
-      include: {
-        User: true,
+    // 1. Obter todos os NameKid
+const nameKids = await prisma.nameKid.findMany({
+  include: {
+    User: true,
+    VoteNameKid: true,
+  },
+});
+
+// 2. Para cada NameKid, contar os votos true e false
+const nameKidsWithVoteCounts = await Promise.all(
+  nameKids.map(async (nameKid) => {
+    const voteCounts = await prisma.voteNameKid.groupBy({
+      by: ['vote'],
+      where: {
+        id_name: nameKid.id,
       },
-    })
+      _count: {
+        _all: true,
+      },
+    });
+
+    const positiveVoteCount = voteCounts.find(v => v.vote === true)?._count._all || 0;
+    const negativeVoteCount = voteCounts.find(v => v.vote === false)?._count._all || 0;
+
+    return {
+      ...nameKid,
+      positiveVoteCount,
+      negativeVoteCount,
+    };
+  })
+);
+  return nameKidsWithVoteCounts
   } catch (error) {
+    console.log(error)
     return false
   }
   
