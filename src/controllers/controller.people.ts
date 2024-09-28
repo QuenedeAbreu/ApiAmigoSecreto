@@ -98,6 +98,7 @@ export const peopleSearch: RequestHandler  = async (req,res) =>{
     cpf:z.string().transform(val=>val.replace(/\.|-/gm,''))
   })
   const query = searchPeopleSchema.safeParse(req.query);
+
   if(!query.success){
     return res.status(400).json({message:"Invalid data"})
   }
@@ -105,9 +106,10 @@ export const peopleSearch: RequestHandler  = async (req,res) =>{
     id_event:parseInt(id_event),
     cpf:query.data.cpf
   })
+
   if(peopleItem && peopleItem.matched){
     const matchId = utils.decryptMatch(peopleItem.matched);
-    
+    console.log(matchId);
     const peopleMatch = await peopleService.peopleGetById({
       id_event:parseInt(id_event),
       id:matchId
