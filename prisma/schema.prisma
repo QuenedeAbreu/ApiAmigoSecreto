@@ -55,7 +55,7 @@ model EventPeople {
   id_group Int
   name     String
   cpf      String
-  matched  String     @default("")
+  matched  String     @default("") @db.VarChar(4000)
   event    Event      @relation(fields: [id_event], references: [id])
   group    EventGroup @relation(fields: [id_group], references: [id])
 

@@ -2,9 +2,16 @@ import { RequestHandler } from "express";
 import * as servicesNamekid from "../services/service.namekid";
 import { z } from "zod";
 
-//Buscar todos os nomes de crianças
+//Buscar todos os nomes de crianças com id do usuario nos votos
 export const NamekidGetAll:RequestHandler = async (req,res) =>{
+  const id_user = req.params.id_user;
   const names = await servicesNamekid.getAllNameKid();
+  if(names) return res.status(200).json({names:names});
+  res.status(500).json({message:"Internal Server Error"})
+}
+export const NamekidGetAllIdVote:RequestHandler = async (req,res) =>{
+  const id_user = req.params.id_user;
+  const names = await servicesNamekid.getAllNameKidId(parseInt(id_user));
   if(names) return res.status(200).json({names:names});
   res.status(500).json({message:"Internal Server Error"})
 }
@@ -69,4 +76,24 @@ export const NamekidDelete:RequestHandler = async (req, res) =>{
   if(result) return res.status(200).json({message:"Nome de criança deletado com sucesso!"});
   res.status(500).json({message:"Internal Server Error"})
 }
+
+//vote namekid
+export const NamekidVote:RequestHandler = async (req, res) =>{
+  const id_name = req.params.id_name;
+  const id_user = req.params.id_user;
+  const vote = req.body.vote;
+  //pesquisear se ja exite um voto com esse id_name e o id_user
+  const existVoteNameKid = await servicesNamekid.getVoteNameKid(parseInt(id_name), parseInt(id_user));
+  if(existVoteNameKid) {
+    const result = await servicesNamekid.updateVoteNameKid(existVoteNameKid.id, vote);
+    if(result) return res.status(200).json({message:"Voto atualizado com sucesso!"});
+    return res.status(500).json({message:"Internal Server Error"})
+  }
+
+  const result = await servicesNamekid.voteNameKid(parseInt(id_name), parseInt(id_user), vote);
+  console.log(result);
+  if(result) return res.status(200).json({message:"Voto registrado com sucesso!"});
+  res.status(500).json({message:"Internal Server Error"})
+}
+
 

@@ -16,11 +16,13 @@ import * as controllerDeploy from '../controllers/controller.deploy'
 const router = Router();
 //Rotas de nomes de crianças
 router.get('/namekid', validadeLogin,controllerNamekid.NamekidGetAll)
+router.get('/namekid/vote/:id_user', validadeLogin,controllerNamekid.NamekidGetAllIdVote)
 router.get('/namekid/:id', validadeLogin, controllerNamekid.NamekidGetById)
 router.post('/namekid/user/:id_user', validadeLogin, controllerNamekid.NamekidAdd)
 router.put('/namekid/:id/user/:id_user', validadeLogin, controllerNamekid.NamekidUpdate)
 router.delete('/namekid/:id/user/:id_user', validadeLogin, controllerNamekid.NamekidDelete)
-
+// Rotas vote nome de crianças 
+router.post('/namekid/vote/:id_name/user/:id_user', validadeLogin, controllerNamekid.NamekidVote)
 
 
 //Rotas usuario
