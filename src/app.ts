@@ -4,8 +4,6 @@ import siteRouters from './routers/site.routers';
 import adminRouters from './routers/admin.routers';
 import {requestIntercepter} from './utils/middleware/requestIntercepter';
 
-
-
 const app = express();
 // View engine setup
 // app.set('view engine', 'ejs');
