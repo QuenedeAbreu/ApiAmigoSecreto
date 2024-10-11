@@ -3,6 +3,7 @@ import cors from 'cors';
 import siteRouters from './routers/site.routers';
 import adminRouters from './routers/admin.routers';
 import {requestIntercepter} from './utils/middleware/requestIntercepter';
+import { setupSwagger } from './swagger/swagger';
 
 const app = express();
 // View engine setup
@@ -17,5 +18,5 @@ app.all('*',requestIntercepter)
 
 app.use('/',siteRouters)
 app.use('/admin',adminRouters)
-
+setupSwagger(app);
 export default app;

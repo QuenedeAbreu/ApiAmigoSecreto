@@ -1,0 +1,144 @@
+openapi: 3.0.0
+info:
+  title: Documentação Api AmigoSecreto
+  version: 1.0.0
+  description: |-
+    A API de Amigo Secreto facilita a organização de sorteios online, onde usuários podem cadastrar participantes com nome e e-mail, realizar o sorteio de amigos secretos, e enviar automaticamente e-mails informando o participante sobre quem ele sorteou. A API geralmente utiliza Node.js para o backend, Mysql para o banco de dados, e Next para o frontend, oferecendo uma integração simples e eficiente para criar eventos de Amigo Secreto personalizados.
+    [GitHub](https://github.com/QuenedeAbreu/ApiAmigoSecreto)
+
+
+  contact:
+    name: Support Team
+    email: quenede.in@gmail.com
+
+servers:
+  - url: http://api.quenede.com.br
+    description: Link Remoto
+  - url: http://localhost:3000
+    description: Servidor local
+  
+tags:
+  - name: Auth
+    description: Operations about user
+
+
+
+
+
+
+paths:
+  /admin/login:
+    post:
+      summary: Registra o usuário no sistema
+      tags: 
+        - Auth
+      parameters:
+        - name: username
+          in: query
+          description: The user name for login
+          required: false
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: false
+          schema:
+            type: string  
+      responses:
+        '200':
+          description: Login com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auth'      
+                  
+        '403':
+          description: Login sem sucesso
+          content:
+            application/json:
+              schema:
+                properties:
+                  is_login:
+                    type: string
+                    example: boolean
+                  message: 
+                    type: string
+                    example: Email ou senha incorreto!
+                  
+
+  /user/{tokenuser}:
+    post:
+      summary: Retorna informações do usuário baseado no token
+      tags:
+        - Auth
+      parameters:
+        - name: tokenuser
+          in: path
+          required: true
+          description: O token do usuário
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Informações do usuário
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auth'
+        '403':
+          description: Login sem sucesso
+          content:
+            application/json:
+              schema:
+                properties:
+                  is_login:
+                    type: string
+                    example: false
+                  message: 
+                    type: string
+                    example: Usuário não encontrado!
+
+     
+            
+            
+components:
+  schemas:
+    Auth:
+      type: object
+      properties:
+        token:
+          type: string
+          example: token (JWT)
+        user:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Nome do usuário
+            email:
+              type: string
+              example: Email do usuário
+            is_admin:
+              type: boolean
+              example: Informa se o usuário é admin
+            is_acessall:
+              type: boolean
+              example: Informa se o usuário pode acessar todas as areas do sistema
+          
+            
+      
+
+
+
+
+
+  securitySchemes:
+    ApiKeyAuth: # arbitrary name for the security scheme
+      type: apiKey
+      in: header # can be "header", "query" or "cookie"
+      name: X-API-KEY # name of the header, query parameter or cookie
+
+# 2) Apply the API key globally to all operations
+security:
+  - ApiKeyAuth: [] # use the same name as under securitySchemes      
